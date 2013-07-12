@@ -1,0 +1,26 @@
+.wrap h2 {
+	margin-bottom: 15px;
+}
+
+.wrap label {
+	display: inline-block;
+	width: 100px;
+	vertical-align: top;
+}
+
+div.msliderOptionLabel {
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+div.msliderOptions {
+	margin-left: 15px;
+}
+
+div.msliderErrors {
+	color: red;
+	font-size: 14px;
+	font-weight: bold;
+	
+	margin-bottom: 15px;
+}
