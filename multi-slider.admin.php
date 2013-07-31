@@ -1,44 +1,49 @@
 <?php
-/* Serialized slider array
- *
- * $mslider['slider-slug'] => ['name', 'description', 'use_tracking', 'dimensions', 'transition', 'transition_speed', 'slide_duration', 'hover_pause'];
- *
- * Future: pager, show_prevnext
- *
- */
 
-if (!function_exists('mslider_adminMenu'))
+require_once(plugin_dir_path(__FILE__) .'/multi-slider.admin.manage-sliders.php');
+require_once(plugin_dir_path(__FILE__) .'/multi-slider.admin.add-slider.php');
+
+class Multi_Slider_Admin
 {
-	function mslider_adminMenu()
+	public static function init()
 	{
-		add_menu_page('Manage Sliders', 'Multi Slider', 'install_plugins', 'mslider-settings', 'mslider_manageSliders');
-		add_submenu_page('mslider-settings', 'Add Slider', 'Add Slider', 'install_plugins', 'mslider-add-slider', 'mslider_addSlider');
-		add_submenu_page('mslider-settings', 'Click Tracking', 'Click Tracking', 'manage_options', 'mslider-tracking', 'mslider_tracking');
+		add_action('admin_init', array('Multi_Slider_Admin', 'prep_admin'));
+		add_action('admin_menu', array('Multi_Slider_Admin', 'add_menu'));
+		add_action('admin_action_mslider_delete_slider', array('Multi_Slider_Admin', 'delete_slider'));
 	}
-}
-
-add_action('admin_menu', 'mslider_adminMenu');
-
-if (! function_exists('mslider_manageSliders')) {
-	function mslider_manageSliders()
+	
+	public static function prep_admin()
 	{
-		require_once(__DIR__ .'/multi-slider.admin.manageSliders.php');
-		
-		mslider_manageSliders_panel();
+		wp_register_style('mslider-admin-style', plugins_url() .'/multi-slider/multi-slider.admin.css');
 	}
-}
 
-if (! function_exists('mslider_addSlider')) {
-	function mslider_addSlider()
+	public static function add_menu()
 	{
-		require_once(__DIR__ .'/multi-slider.admin.addSlider.php');
-		
-		mslider_addSlider_panel();
-	}
-}
+		$mpage = add_menu_page('Manage Sliders', 'Multi Slider', 'install_plugins', 'mslider-settings', array('Multi_Slider_Admin', 'manage_sliders'));
+		$apage = add_submenu_page('mslider-settings', 'Add Slider', 'Add Slider', 'install_plugins', 'mslider-add-slider', array('Multi_Slider_Admin', 'add_slider'));
+		$tpage = add_submenu_page('mslider-settings', 'Click Tracking', 'Click Tracking', 'manage_options', 'mslider-tracking', array('Multi_Slider_Tracking', 'slide_tracking'));
 
-if (! function_exists('mslider_delete_slider')) {
-	function mslider_delete_slider()
+		add_action('admin_print_styles-'. $mpage, array('Multi_Slider_Admin', 'admin_styles'));
+		add_action('admin_print_styles-'. $apage, array('Multi_Slider_Admin', 'admin_styles'));
+		add_action('admin_print_styles-'. $tpage, array('Multi_Slider_Admin', 'admin_styles'));
+	}
+
+	public static function admin_styles()
+	{
+		wp_enqueue_style('mslider-admin-style');
+	}
+
+	public static function manage_sliders()
+	{
+		Multi_Slider_Admin_Manage::manage_sliders_panel();
+	}
+
+	public static function add_slider()
+	{
+		Multi_Slider_Admin_Add::add_slider_panel();
+	}
+
+	public static function delete_slider()
 	{
 		if (!empty($_POST) && check_admin_referer('multi_slider_delete_slider', 'multi_slider_nonce')) {
 			$mslider_slug = sanitize_title_with_dashes($_REQUEST['mslider_slug']);
@@ -68,7 +73,5 @@ if (! function_exists('mslider_delete_slider')) {
 	    exit();
 	}
 }
-
-add_action('admin_action_mslider_delete_slider', 'mslider_delete_slider');
 
 ?>

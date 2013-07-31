@@ -1,16 +1,19 @@
 <?php
+class Multi_Slider_Tracking
+{
+	public static function init()
+	{
+		// Ajax handler to log clicks
+		add_action('wp_ajax_trackMslider', array('Multi_Slider_Tracking', 'mslider_trackClick'));
+		add_action('wp_ajax_nopriv_trackMslider', array('Multi_Slider_Tracking', 'mslider_trackClick'));
+	}
 
-// Ajax handler to log clicks
-add_action('wp_ajax_trackMslider', 'mslider_trackClick');
-add_action('wp_ajax_nopriv_trackMslider', 'mslider_trackClick');
-
-if (!function_exists('mslider_trackClick')) {
-	function mslider_trackClick()
+	public static function mslider_trackClick()
 	{
 		global $wpdb;
 		
-		$mslider_slug = $_POST['slug'];
-		$slide_clicked = $_POST['slide'];
+		$mslider_slug = sanitize_text_field($_POST['slug']);
+		$slide_clicked = sanitize_text_field($_POST['slide']);
 		$visitorIp = $_SERVER['REMOTE_ADDR'];
 		
 		$wpdb->insert( 
@@ -31,10 +34,8 @@ if (!function_exists('mslider_trackClick')) {
 		
 		die();
 	}
-}
 
-if (!function_exists('mslider_tracking')) {
-	function mslider_tracking()
+	public static function slide_tracking()
 	{
 		global $wpdb;
 		
