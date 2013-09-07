@@ -3,7 +3,7 @@
 Plugin Name: Multi Slider
 Plugin URI: http://croberts.me/multi-slider/
 Description: Provides a simple method to add one or more sliders to your website.
-Version: 1.1.5
+Version: 1.2.0
 Author: Chris Roberts
 Author URI: http://croberts.me/
 */

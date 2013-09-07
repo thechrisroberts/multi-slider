@@ -188,7 +188,13 @@ class Multi_Slider_Slide
 		$output = '';
 		
 		if ($slides->found_posts > 0) {
-			$output .= "<div class=\"mslider mslider_". $slug ." ". $slug ."\">\n";
+			if ($slider_settings['pause_on_hover']) {
+				$pause = "true";
+			} else {
+				$pause = "false";
+			}
+
+			$output .= "<div class=\"cycle-slideshow mslider mslider_". $slug ." ". $slug ."\" data-cycle-slides=\"> div\" data-cycle-pause-on-hover=\"". $pause ."\" data-cycle-fx=\"". $slider_settings['transition'] ."\" data-cycle-speed=\"". $slider_settings['transition_speed'] ."\" data-cycle-timeout=\"". $slider_settings['delay_time'] ."\">\n";
 			
 			$counter = 0;
 			while ($slides->have_posts()) {

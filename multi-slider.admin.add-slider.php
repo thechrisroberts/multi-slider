@@ -159,32 +159,10 @@ class Multi_Slider_Admin_Add
 					
 					<label for="mslider_transition">Transition</label>
 					<select name="mslider_transition" id="mslider_transition">
-						<option value="blindX">blindX</option>
-						<option value="blindY">blindY</option>
-						<option value="blindZ">blindZ</option>
-						<option value="cover">cover</option>
-						<option value="curtainX">curtainX</option>
-						<option value="curtainY">curtainY</option>
 						<option value="fade">fade</option>
-						<option value="fadeZoom">fadeZoom</option>
-						<option value="growX">growX</option>
-						<option value="growY">growY</option>
+						<option value="fadeout">fadeout</option>
+						<option value="scrollHorz">scrollHorz</option>
 						<option value="none">none</option>
-						<option value="scrollUp">scrollUp</option>
-						<option value="scrollDown">scrollDown</option>
-						<option value="scrollLeft">scrollLeft</option>
-						<option value="scrollRight">scrollRight</option>
-						<option value="shuffle">shuffle</option>
-						<option value="slideX">slideX</option>
-						<option value="slideY">slideY</option>
-						<option value="toss">toss</option>
-						<option value="turnUp">turnUp</option>
-						<option value="turnDown">turnDown</option>
-						<option value="turnLeft">turnLeft</option>
-						<option value="turnRight">turnRight</option>
-						<option value="uncover">uncover</option>
-						<option value="wipe">wipe</option>
-						<option value="zoom">zoom</option>
 					</select><br /><br />
 					
 					<label for="mslider_transition_speed">Transition Speed</label> <input type="text" size="5" name="mslider_transition_speed" id="mslider_transition_speed" value="<?php echo $mslider_slider_settings['transition_speed']; ?>" /> (in milliseconds)<br /><br />

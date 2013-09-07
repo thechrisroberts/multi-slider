@@ -16,7 +16,7 @@ class Multi_Slider_Load_Scripts
 		wp_enqueue_script('jquery');
 		
 		// Load the cycle script
-		wp_register_script('jquery_cycle', plugins_url() .'/multi-slider/jquery.cycle.all.js', array('jquery'));
+		wp_register_script('jquery_cycle', plugins_url() .'/multi-slider/js/jquery.cycle2.min.js', array('jquery'));
 		wp_enqueue_script('jquery_cycle');
 	}
 
@@ -56,24 +56,6 @@ class Multi_Slider_Load_Scripts
 		$mslider_js = '';
 		
 		$mslider_data = unserialize(get_option('mslider_slide_'. $mslider_slug));
-		
-		if (is_array($mslider_data)) {
-			if ($mslider_data['pause_on_hover']) {
-				$pause = 1;
-			} else {
-				$pause = 0;
-			}
-			
-			$mslider_js .= "jQuery('.mslider_". $mslider_slug ."').cycle({\n";
-			$mslider_js .= "	cleartype: 0,\n";
-			$mslider_js .= "	timeout: ". $mslider_data['delay_time'] .",\n";
-			$mslider_js .= "	speed: ". $mslider_data['transition_speed'] .",\n";
-			$mslider_js .= "	fx: '". $mslider_data['transition'] ."',\n";
-			$mslider_js .= "	pause: ". $pause .",\n";
-			$mslider_js .= "	width: ". $mslider_data['width'] .",\n";
-			$mslider_js .= "	height: ". $mslider_data['height'] ."\n";
-			$mslider_js .= "});\n";
-		}
 		
 		if ($mslider_data['track_clicks']) {
 			$mslider_js .= "jQuery('.mslider_". $mslider_slug ." a').mousedown(function() {\n";
