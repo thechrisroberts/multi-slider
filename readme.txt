@@ -3,8 +3,8 @@ Contributors: Columcille
 Donate link: http://croberts.me/
 Tags: slider, header, image, text
 Requires at least: 3.0
-Tested up to: 3.6
-Stable tag: 1.2.1
+Tested up to: 3.6.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,9 @@ The function is mslider_show_slide($mslider_slug, $mslider_return_output) $mslid
 2. There are various options available for defining a slider, including multiple transitions.
 
 == Changelog ==
+
+= 1.3.0 =
+* Slider content gets displayed with the slider, allowing overlay text, descriptive content, etc.
 
 = 1.2.0 =
 * Updated to use responsive jQuery Cycle 2
