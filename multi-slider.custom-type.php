@@ -245,13 +245,8 @@ class Multi_Slider_Slide
 					} else {
 						$output .= "		". $thumbnail ."\n";
 					}
-				}
-				
-				// See if we have any content to add
-				$slider_content = get_the_content();
-				
-				if (!empty($slider_content)) {
-					$output .= $slider_content;
+
+					$output .= $content;
 				}
 				
 				$output .= "	</div>\n";
