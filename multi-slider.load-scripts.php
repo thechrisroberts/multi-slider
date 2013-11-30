@@ -6,8 +6,6 @@ class Multi_Slider_Load_Scripts
 	{
 		add_action('wp_print_scripts', array('Multi_Slider_Load_Scripts', 'load_scripts'));
 		add_action('admin_init', array('Multi_Slider_Load_Scripts', 'load_admin_scripts'));
-
-		add_action('wp_head', array('Multi_Slider_Load_Scripts', 'insert_js'));
 	}
 
 	public static function load_scripts()
@@ -22,33 +20,10 @@ class Multi_Slider_Load_Scripts
 
 	public static function load_admin_scripts()
 	{
-		wp_register_style('jquery-ui-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css', true);
+		wp_register_style('jquery-ui-style', 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', true);
         wp_enqueue_style('jquery-ui-style' );
         
         wp_enqueue_script('jquery');
-	}
-
-	public static function insert_js()
-	{
-		/*
-		$mslider_sliders = get_option('mslider_sliders', array());
-		
-		if (!is_array($mslider_sliders))
-			$mslider_sliders = unserialize($mslider_sliders);
-		
-		if (sizeof($mslider_sliders) > 0) {
-			echo "<script type=\"text/javascript\">\n";
-			echo "jQuery(document).ready(function() {\n";
-			
-			// Loop through our slides and generate scripts
-			foreach ($mslider_sliders as $mslider_slug => $mslider_info) {
-				echo self::js_for_slug($mslider_slug);
-			}
-			
-			echo "});\n";
-			echo "</script>\n";
-		}
-		*/
 	}
 
 	public static function js_for_slug($mslider_slug, $mslider_settings = false)

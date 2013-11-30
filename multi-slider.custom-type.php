@@ -43,33 +43,36 @@ class Multi_Slider_Slide
 			foreach ($sliders as $slug => $info) {
 				$slide_data = unserialize(get_option('mslider_slide_'. $slug));
 				
-				// Check our plural name
-				if (substr($slide_data['name'], strlen($slide_data['name']) - 1, 1) == "s") {
-					$pluralName = $slide_data['name'];
-				} else {
-					$pluralName = $slide_data['name'] ."s";
+				// See if we're creating a custom type
+				if (empty($slide_data['post_category'])) {
+					// Check our plural name
+					if (substr($slide_data['name'], strlen($slide_data['name']) - 1, 1) == "s") {
+						$pluralName = $slide_data['name'];
+					} else {
+						$pluralName = $slide_data['name'] ."s";
+					}
+					
+					$register_post = register_post_type('mslider_'. $slug,
+														array(
+															'labels' => array(
+																'name' => __($pluralName),
+																'singular_name' => __($slide_data['name']),
+																'edit_item' => __('Edit '. $slide_data['name']),
+																'add_new_item' => __('Add New Slide'),
+																'new_item' => __('New '. $slide_data['name']),
+																'view_item' => __('View '. $slide_data['name']),
+																'search_items' => __('Search '. $pluralName),
+																'not_found' => __('No '. $pluralName .' found'),
+																'not_found_in_trash' => __('No '. $pluralName .' found in trash')
+															),
+															'public' => true,
+															'has_archive' => false,
+															'description' => $slide_data['description'],
+															'exclude_from_search' => true,
+															'supports' => array('title', 'editor', 'thumbnail'),
+															'show_in_nav_menus' => false
+														));
 				}
-				
-				$register_post = register_post_type('mslider_'. $slug,
-													array(
-														'labels' => array(
-															'name' => __($pluralName),
-															'singular_name' => __($slide_data['name']),
-															'edit_item' => __('Edit '. $slide_data['name']),
-															'add_new_item' => __('Add New Slide'),
-															'new_item' => __('New '. $slide_data['name']),
-															'view_item' => __('View '. $slide_data['name']),
-															'search_items' => __('Search '. $pluralName),
-															'not_found' => __('No '. $pluralName .' found'),
-															'not_found_in_trash' => __('No '. $pluralName .' found in trash')
-														),
-														'public' => true,
-														'has_archive' => false,
-														'description' => $slide_data['description'],
-														'exclude_from_search' => true,
-														'supports' => array('title', 'editor', 'thumbnail'),
-														'show_in_nav_menus' => false
-													));
 			}
 		}
 	}
@@ -173,14 +176,22 @@ class Multi_Slider_Slide
 		// Pull up slider settings so we can check our order setting
 		$slider_settings = unserialize(get_option('mslider_slide_'. $slug));
 
-		$query_settings = array('post_type' => 'mslider_'. $slug, 'posts_per_page' => 10);
-
+		// See if we're querying a custom type or a post category
+		if (empty($slider_settings['post_category'])) {
+			$query_settings = array('post_type' => 'mslider_'. $slug, 'posts_per_page' => 10);
+		} else {
+			$query_settings = array('post_type' => 'post', 'category_name' => $slider_settings['post_category'], 'posts_per_page' => 10);
+		}
+		
 		if (isset($slider_settings['mslider_random_order']) && $slider_settings['mslider_random_order'] == true) {
 			$query_settings['orderby'] = 'rand';
 		} else {
 			$query_settings['order'] = 'ASC';
-			$query_settings['orderby'] = 'meta_value_num';
-			$query_settings['meta_key'] = 'slider_order';
+			
+			if (empty($slider_settings['post_category'])) {
+				$query_settings['orderby'] = 'meta_value_num';
+				$query_settings['meta_key'] = 'slider_order';
+			}
 		}
 
 		$slides = new WP_query($query_settings);
@@ -209,9 +220,14 @@ class Multi_Slider_Slide
 
 				$thumbnail = get_the_post_thumbnail(get_the_ID(), 'mslider_'. $slug);
 				
-				$content = get_the_content();
-				$content = apply_filters('the_content', $content);
-				$content = str_replace(']]>', ']]&gt;', $content);
+				if ($slider_settings['caption_title']) {
+					$content = get_the_title();
+				} else {
+					$content = get_the_content();
+					$content = apply_filters('the_content', $content);
+					$content = str_replace(']]>', ']]&gt;', $content);
+					$content = trim($content);
+				}
 				
 				if (!empty($slider_flash_url)) {
 					if (!empty($slideLink[0])) {
@@ -246,7 +262,9 @@ class Multi_Slider_Slide
 					
 					$output .= "<li>";
 					
-					if (!empty($slideLink[0])) {
+					if (!empty($slider_settings['post_category'])) {
+						$output .= '<a target="_blank" href="'. get_permalink() .'">'. $thumbnail .'</a>';
+					} else if (!empty($slideLink[0])) {
 						$output .= '<a target="_blank" href="'. $slideLink[0] .'">'. $thumbnail .'</a>';
 					} else {
 						$output .= $thumbnail;
