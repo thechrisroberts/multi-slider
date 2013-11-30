@@ -18,12 +18,16 @@ class Multi_Slider_Admin_Add
 										 'description' => '',
 										 'width' => 300,
 										 'height' => 200,
+										 'slider' => 'cycle',
+										 'caption_position' => 'rs-bottom',
 										 'transition' => 'fade',
 	 									 'transition_speed' => 1000,
 										 'delay_time' => 8000,
 										 'mslider_random_order' => false,
-										 'pause_on_hover' => false,
-										 'track_clicks' => false
+										 'track_clicks' => false,
+										 'show_thumbnails' => true,
+										 'show_arrows' => false,
+										 'autoplay' => true
 										);
 		
 		if (isset($_REQUEST['mslider_original_slug']) || isset($_REQUEST['mslider_slug'])) {
@@ -37,14 +41,18 @@ class Multi_Slider_Admin_Add
 			$mslider_slider_settings['name'] = isset($_POST['mslider_name']) ? sanitize_text_field($_POST['mslider_name']) : '';
 			$mslider_slider_settings['slug'] = isset($_POST['mslider_slug']) ? sanitize_title_with_dashes($_POST['mslider_slug']) : '';
 			$mslider_slider_settings['description'] = isset($_POST['mslider_description']) ? $_POST['mslider_description'] : '';
-			$mslider_slider_settings['width'] = isset($_POST['mslider_width']) ? intval($_POST['mslider_width']) : '';
-			$mslider_slider_settings['height'] = isset($_POST['mslider_height']) ? intval($_POST['mslider_height']) : '';
-			$mslider_slider_settings['transition'] = isset($_POST['mslider_transition']) ? sanitize_text_field($_POST['mslider_transition']) : '';
-			$mslider_slider_settings['transition_speed'] = isset($_POST['mslider_transition_speed']) ? intval($_POST['mslider_transition_speed']) : '';
-			$mslider_slider_settings['delay_time'] = isset($_POST['mslider_delay_time']) ? intval($_POST['mslider_delay_time']) : '';
+			$mslider_slider_settings['width'] = isset($_POST['mslider_width']) ? intval($_POST['mslider_width']) : 300;
+			$mslider_slider_settings['height'] = isset($_POST['mslider_height']) ? intval($_POST['mslider_height']) : 200;
+			$mslider_slider_settings['slider'] = isset($_POST['mslider_slider']) ? sanitize_text_field($_POST['mslider_slider']) : 'cycle';
+			$mslider_slider_settings['caption_position'] = isset($_POST['mslider_caption_position']) ? sanitize_text_field($_POST['mslider_caption_position']) : '';
+			$mslider_slider_settings['transition'] = isset($_POST['mslider_transition']) ? sanitize_text_field($_POST['mslider_transition']) : 'fade';
+			$mslider_slider_settings['transition_speed'] = isset($_POST['mslider_transition_speed']) ? intval($_POST['mslider_transition_speed']) : 1000;
+			$mslider_slider_settings['delay_time'] = isset($_POST['mslider_delay_time']) ? intval($_POST['mslider_delay_time']) : 8000;
 			$mslider_slider_settings['mslider_random_order'] = isset($_POST['mslider_random_order']) ? intval($_POST['mslider_random_order']) : '';
-			$mslider_slider_settings['pause_on_hover'] = isset($_POST['mslider_pause_on_hover']) ? intval($_POST['mslider_pause_on_hover']) : '';
-			$mslider_slider_settings['track_clicks'] = isset($_POST['mslider_track_clicks']) ? intval($_POST['mslider_track_clicks']) : '';
+			$mslider_slider_settings['show_thumbnails'] = isset($_POST['mslider_show_thumbnails']) ? intval($_POST['mslider_show_thumbnails']) : false;
+			$mslider_slider_settings['show_arrows'] = isset($_POST['mslider_show_arrows']) ? intval($_POST['mslider_show_arrows']) : false;
+			$mslider_slider_settings['autoplay'] = isset($_POST['mslider_autoplay']) ? intval($_POST['mslider_autoplay']) : false;
+			$mslider_slider_settings['track_clicks'] = isset($_POST['mslider_track_clicks']) ? intval($_POST['mslider_track_clicks']) : false;
 			
 			/* Check our values */
 			
@@ -125,7 +133,10 @@ class Multi_Slider_Admin_Add
 		
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
+				// Fill in values
 				jQuery('#mslider_transition').val('<?php echo $mslider_slider_settings['transition']; ?>');
+				jQuery('#mslider_caption_position').val('<?php echo $mslider_slider_settings['caption_position']; ?>');
+				jQuery('#mslider_slider').val('<?php echo $mslider_slider_settings['slider']; ?>');
 				
 				jQuery('#mslider_delete').submit(function() {
 					return confirm('Warning: Are you sure you want to delete this slider? It will be removed, along with any slides you have added. This cannot be undone.');
@@ -157,22 +168,55 @@ class Multi_Slider_Admin_Add
 					
 					<label for="mslider_width">Slider size</label> <input type="text" size="3" name="mslider_width" id="mslider_width" placeholder="width" value="<?php echo $mslider_slider_settings['width']; ?>" /> X <input type="text" size="3" name="mslider_height" id="mslider_height" placeholder="height" value="<?php echo $mslider_slider_settings['height']; ?>" /> (in pixels)<br /><br />
 					
+					Which slider script do you want to use? RefineSlide provides more options for images, but jQuery Cycle works with text.<br />
+					<label for="mslider_slider">Slider script</label>
+					<select name="mslider_slider" id="mslider_slider">
+						<option value="cycle">jQuery Cycle</option>
+						<option value="refine">RefineSlide</option>
+					</select><br /><br />
+					
+					<label for="mslider_caption_position">Caption Position</label>
+					<select name="mslider_caption_position" id="mslider_caption_position">
+						<option value="rs-bottom">Bottom</option>
+						<option value="rs-bottom-left">Bottom left</option>
+						<option value="rs-bottom-right">Bottom right</option>
+						<option value="rs-top">Top</option>
+						<option value="rs-top-left">Top left</option>
+						<option value="rs-top-right">Top right</option>
+						<option value="rs-left">Left side</option>
+						<option value="rs-right">Right side</option>						
+					</select> If using an image slider with captions, where should the caption be displayed?<br /><br />
+					
 					<label for="mslider_transition">Transition</label>
 					<select name="mslider_transition" id="mslider_transition">
-						<option value="fade">fade</option>
-						<option value="fadeout">fadeout</option>
-						<option value="scrollHorz">scrollHorz</option>
-						<option value="none">none</option>
-					</select><br /><br />
+						<option value="random">Random transition</option>
+						<option value="cubeH">Horizontal cube</option>
+						<option value="cubeV">Vertical cube</option>
+						<option value="fade">Fade</option>
+						<option value="sliceH">Horizontal slice</option>
+						<option value="sliceV">Vertical slice</option>
+						<option value="slideH">Horizontal slide</option>
+						<option value="slideV">Vertical slide</option>
+						<option value="scale">Scale</option>
+						<option value="blockScale">Block scale</option>
+						<option value="kaleidoscope">Kaleidoscope</option>
+						<option value="fan">Fan</option>
+						<option value="blindH">Horizontal blind</option>
+						<option value="blindV">Vertical blind</option>
+					</select> See <a href="http://alexdunphy.github.io/refineslide/demo.html">transition demos</a>.<br /><br />
 					
 					<label for="mslider_transition_speed">Transition Speed</label> <input type="text" size="5" name="mslider_transition_speed" id="mslider_transition_speed" value="<?php echo $mslider_slider_settings['transition_speed']; ?>" /> (in milliseconds)<br /><br />
 					
 					<label for="mslider_delay_time">Delay Time</label> <input type="text" size="5" name="mslider_delay_time" id="mslider_delay_time" value="<?php echo $mslider_slider_settings['delay_time']; ?>" /> (in milliseconds)<br /><br />
 					
+					<label for="mslider_autoplay">Autoplay</label> <input type="checkbox" name="mslider_autoplay" id="mslider_autoplay" value="1" <?php if ($mslider_slider_settings['autoplay']) { echo 'checked="checked"'; }; ?> /><br /><br />
+					
+					<label for="mslider_show_thumbnails">Show Thumbnails</label> <input type="checkbox" name="mslider_show_thumbnails" id="mslider_show_thumbnails" value="1" <?php if ($mslider_slider_settings['show_thumbnails']) { echo 'checked="checked"'; }; ?> /> If using an image slider, show thumbnails with main images.<br /><br />
+					
+					<label for="mslider_show_arrows">Show Arrows</label> <input type="checkbox" name="mslider_show_arrows" id="mslider_show_arrows" value="1" <?php if ($mslider_slider_settings['show_arrows']) { echo 'checked="checked"'; }; ?> /><br /><br />
+					
 					<label for="mslider_random_order">Randomize</label> <input type="checkbox" name="mslider_random_order" id="mslider_random_order" value="1" <?php if ($mslider_slider_settings['mslider_random_order']) { echo 'checked="checked"'; }; ?> /> (Will ignore sort order)<br /><br />
 
-					<label for="mslider_pause_on_hover">Pause on hover</label> <input type="checkbox" name="mslider_pause_on_hover" id="mslider_pause_on_hover" value="1" <?php if ($mslider_slider_settings['pause_on_hover']) { echo 'checked="checked"'; }; ?> /><br /><br />
-					
 					<label for="mslider_track_clicks">Track clicks</label> <input type="checkbox" name="mslider_track_clicks" id="mslider_track_clicks" value="1" <?php if ($mslider_slider_settings['track_clicks']) { echo 'checked="checked"'; }; ?> /><br /><br />
 					
 					<?php submit_button(); ?>

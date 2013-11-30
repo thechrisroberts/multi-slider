@@ -16,21 +16,24 @@ class Multi_Slider_Tracking
 		$slide_clicked = sanitize_text_field($_POST['slide']);
 		$visitorIp = $_SERVER['REMOTE_ADDR'];
 		
-		$wpdb->insert( 
-			$wpdb->prefix .'mslider_tracking', 
-			array( 
-				'slug' => $mslider_slug, 
-				'slide_clicked' => $slide_clicked,
-				'visitor' => $visitorIp, 
-				'click_time' => current_time('mysql', 1)
-			), 
-			array( 
-				'%s', 
-				'%s', 
-				'%s', 
-				'%s'
-			) 
-		);
+		// Make sure database exists
+		if (Multi_Slider_DB::check_db()) {
+			$wpdb->insert( 
+				$wpdb->prefix .'mslider_tracking', 
+				array( 
+					'slug' => $mslider_slug, 
+					'slide_clicked' => $slide_clicked,
+					'visitor' => $visitorIp, 
+					'click_time' => current_time('mysql', 1)
+				), 
+				array( 
+					'%s', 
+					'%s', 
+					'%s', 
+					'%s'
+				) 
+			);
+		}
 		
 		die();
 	}
@@ -109,11 +112,13 @@ class Multi_Slider_Tracking
 						});
 					</script>
 					
-					Select new date range:
+					<h3>Select new date range</h3>
 					<form method="get" action="<?php echo admin_url('admin.php'); ?>">
-					<input type="hidden" name="page" value="mslider-tracking" />
-					
-					<label>From <input type="text" id="adDateRangeStart" name="adDateRangeStart"></label> <label>to <input type="text" id="adDateRangeEnd" name="adDateRangeEnd"></label> <input type="submit" value="Go" /><br />
+						<input type="hidden" name="page" value="mslider-tracking" />
+						
+						<label for="adDateRangeStart">From: </label> <input type="text" id="adDateRangeStart" name="adDateRangeStart"><br />
+						<label for="adDateRangeEnd">To: </label> <input type="text" id="adDateRangeEnd" name="adDateRangeEnd"><br />
+						<input type="submit" value="Go" /><br />
 					</form>
 					
 					<?php

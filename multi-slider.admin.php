@@ -14,7 +14,7 @@ class Multi_Slider_Admin
 	
 	public static function prep_admin()
 	{
-		wp_register_style('mslider-admin-style', plugins_url() .'/multi-slider/multi-slider.admin.css');
+		wp_register_style('mslider-admin-style', plugins_url() .'/multi-slider/css/multi-slider.admin.css');
 	}
 
 	public static function add_menu()
@@ -26,11 +26,17 @@ class Multi_Slider_Admin
 		add_action('admin_print_styles-'. $mpage, array('Multi_Slider_Admin', 'admin_styles'));
 		add_action('admin_print_styles-'. $apage, array('Multi_Slider_Admin', 'admin_styles'));
 		add_action('admin_print_styles-'. $tpage, array('Multi_Slider_Admin', 'admin_styles'));
+		add_action('admin_print_scripts-'. $tpage, array('Multi_Slider_Admin', 'admin_scripts'));
 	}
 
 	public static function admin_styles()
 	{
 		wp_enqueue_style('mslider-admin-style');
+	}
+	
+	public static function admin_scripts()
+	{
+		wp_enqueue_script('jquery-ui-datepicker');
 	}
 
 	public static function manage_sliders()

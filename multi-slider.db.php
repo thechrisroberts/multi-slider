@@ -6,8 +6,18 @@ class Multi_Slider_DB
 		// Make sure we have our database for click tracking
 		register_activation_hook(__FILE__, array('Multi_Slider_DB', 'install_db'));
 	}
+	
+	public static function check_db()
+	{
+		global $wpdb;
+		
+		$table_name = $wpdb->prefix . "mslider_tracking";
+		
+		return ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name);
+	}
 
-	public static function install_db() {
+	public static function install_db()
+	{
 		global $wpdb;
 		
 		$table_name = $wpdb->prefix . "mslider_tracking";

@@ -10,7 +10,7 @@ class Multi_Slider_Load_Styles
 
 	public static function load_styles()
 	{
-		wp_register_style('mslider-style', plugins_url() .'/multi-slider/multi-slider.css');
+		wp_register_style('mslider-style', plugins_url() .'/multi-slider/css/multi-slider.css');
 		wp_enqueue_style('mslider-style');
 	}
 }

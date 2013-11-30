@@ -28,7 +28,7 @@ class Multi_Slider_Slide
 		}
 	}
 
-	public function post_edit_form_tag( ) {
+	public static function post_edit_form_tag( ) {
 		echo ' enctype="multipart/form-data"';
 	}
 
@@ -188,15 +188,15 @@ class Multi_Slider_Slide
 		$output = '';
 		
 		if ($slides->found_posts > 0) {
-			if ($slider_settings['pause_on_hover']) {
-				$pause = "true";
-			} else {
-				$pause = "false";
-			}
-
-			$output .= "<div class=\"cycle-slideshow mslider mslider_". $slug ." ". $slug ."\" data-cycle-slides=\"> div\" data-cycle-pause-on-hover=\"". $pause ."\" data-cycle-fx=\"". $slider_settings['transition'] ."\" data-cycle-speed=\"". $slider_settings['transition_speed'] ."\" data-cycle-timeout=\"". $slider_settings['delay_time'] ."\">\n";
+			// Output the script tag
+			
+			$output .= Multi_Slider_Load_Scripts::js_for_slug($slug, $slider_settings);
+			
+			// Output the slides
+			$output .= "<div class=\"mslider mslider_". $slug ." ". $slug ."\">\n";
 			
 			$counter = 0;
+			$usesImage = false;
 			while ($slides->have_posts()) {
 				$slides->the_post();
 				
@@ -204,8 +204,6 @@ class Multi_Slider_Slide
 				
 				$slideLink = get_post_custom_values('slider_link');
 				$blogurl = get_bloginfo('template_url');
-				
-				$output .= "	<div id=\"slide_". $counter ."\" class=\"slide_". $slug ." mslider_container\">\n";
 				
 				$slider_flash_url = get_post_meta(get_the_ID(), '__slider_flash_url', true);
 
@@ -240,19 +238,33 @@ class Multi_Slider_Slide
 				} else if (empty($thumbnail) && !empty($content)) {
 					$output .= $content;
 				} else if (!empty($thumbnail)) {
-					if (!empty($slideLink[0])) {
-						$output .= "		<a target=\"_blank\" href=\"". $slideLink[0] ."\">". $thumbnail ."</a>\n";
-					} else {
-						$output .= "		". $thumbnail ."\n";
+					// Display our ul wrapper if not showing
+					if ($counter == 1) {
+						$output .= "<ul class=\"mslider_". $slug ."_thumbs\">\n";
+						$usesImage = true;
 					}
-
-					$output .= $content;
+					
+					$output .= "<li>";
+					
+					if (!empty($slideLink[0])) {
+						$output .= '<a target="_blank" href="'. $slideLink[0] .'">'. $thumbnail .'</a>';
+					} else {
+						$output .= $thumbnail;
+					}
+					
+					if (!empty($content)) {
+						$output .= '<div class="rs-caption '. $slider_settings['caption_position'] .'">'. $content .'</div>';
+					}
+					
+					$output .= "</li>\n";
 				}
-				
-				$output .= "	</div>\n";
 			}
 			
 			wp_reset_postdata();
+			
+			if ($usesImage) {
+				$output .= "</ul>\n";
+			}
 			
 			$output .= "</div>\n";
 		}

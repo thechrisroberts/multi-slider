@@ -64,4 +64,5 @@ function mslider_show_slides($slug)
 {
 	Multi_Slider_Slide::show_slides($slug);
 }
+
 ?>
