@@ -20,6 +20,7 @@ class Multi_Slider_Admin_Add
 										 'width' => 300,
 										 'height' => 200,
 										 'slider' => 'cycle',
+										 'max_slides' => 5,
 										 'caption_position' => 'rs-bottom',
 										 'caption_title' => false,
 										 'transition' => 'fade',
@@ -61,6 +62,7 @@ class Multi_Slider_Admin_Add
 			$mslider_slider_settings['show_arrows'] = isset($_POST['mslider_show_arrows']) ? intval($_POST['mslider_show_arrows']) : false;
 			$mslider_slider_settings['autoplay'] = isset($_POST['mslider_autoplay']) ? intval($_POST['mslider_autoplay']) : false;
 			$mslider_slider_settings['track_clicks'] = isset($_POST['mslider_track_clicks']) ? intval($_POST['mslider_track_clicks']) : false;
+			$mslider_slider_settings['max_slides'] = isset($_POST['mslider_max_slides']) ? intval($_POST['mslider_max_slides']) : 5;
 			
 			/* Check our values */
 			
@@ -189,6 +191,8 @@ class Multi_Slider_Admin_Add
 					</select><br /><br />
 					
 					<label for="mslider_width">Slider size</label> <input type="text" size="3" name="mslider_width" id="mslider_width" placeholder="width" value="<?php echo $mslider_slider_settings['width']; ?>" /> X <input type="text" size="3" name="mslider_height" id="mslider_height" placeholder="height" value="<?php echo $mslider_slider_settings['height']; ?>" /> (in pixels)<br /><br />
+					
+					<label for="mslider_max_slides">Max slides</label> <input type="text" size="3" name="mslider_max_slides" id="mslider_max_slides" placeholder="max" value="<?php echo $mslider_slider_settings['max_slides']; ?>" /><br /><br />
 					
 					Which slider script do you want to use? RefineSlide provides more options for images, but jQuery Cycle works with text.<br />
 					<label for="mslider_slider">Slider script</label>

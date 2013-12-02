@@ -183,6 +183,8 @@ class Multi_Slider_Slide
 			$query_settings = array('post_type' => 'post', 'category_name' => $slider_settings['post_category'], 'posts_per_page' => 10);
 		}
 		
+		$query_settings['posts_per_page'] = $slider_settings['max_slides'];
+		
 		if (isset($slider_settings['mslider_random_order']) && $slider_settings['mslider_random_order'] == true) {
 			$query_settings['orderby'] = 'rand';
 		} else {
@@ -218,8 +220,10 @@ class Multi_Slider_Slide
 				
 				$slider_flash_url = get_post_meta(get_the_ID(), '__slider_flash_url', true);
 
-				$thumbnail = get_the_post_thumbnail(get_the_ID(), 'mslider_'. $slug);
-				
+				$thumb_id = get_post_thumbnail_id();
+				$thumb_url = wp_get_attachment_image_src($thumb_id, 'mslider_'. $slug, true);
+				$thumbnail = '<img src="'. $thumb_url[0] .'" alt="'. get_the_title() .'" />';
+
 				if ($slider_settings['caption_title']) {
 					$content = get_the_title();
 				} else {
@@ -256,7 +260,7 @@ class Multi_Slider_Slide
 				} else if (!empty($thumbnail)) {
 					// Display our ul wrapper if not showing
 					if ($counter == 1) {
-						$output .= "<ul class=\"mslider_". $slug ."_thumbs\">\n";
+						$output .= "<ul class=\"rs-slider mslider_". $slug ."_thumbs\">\n";
 						$usesImage = true;
 					}
 					
@@ -271,7 +275,7 @@ class Multi_Slider_Slide
 					}
 					
 					if (!empty($content)) {
-						$output .= '<div class="rs-caption '. $slider_settings['caption_position'] .'">'. $content .'</div>';
+						$output .= '<div class="rs-caption '. $slider_settings['caption_position'] .'"><p>'. $content .'</p></div>';
 					}
 					
 					$output .= "</li>\n";

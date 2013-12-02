@@ -1,23 +1,23 @@
 .mslider {
-	/* display: none; */
+    /* display: none; */
 }
 
 .mslider_trackbox {
-	float: left;
-	margin-top: 20px;
-	margin-right: 10px;
+    float: left;
+    margin-top: 20px;
+    margin-right: 10px;
 }
 
 .mslider_flashLink {
-	position: relative;
+    position: relative;
 }
 
 .mslider_flashLink a {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	text-indent: -9999em;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-indent: -9999em;
 }
 
 /* RefineSlide CSS here */
@@ -43,6 +43,12 @@
 }
 
 .rs-slide-bg { *zoom: 1 }
+
+ul.rs-slider {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
 
 .rs-slider > li > a { display: block }
 
@@ -122,6 +128,11 @@
     padding: 5px;
 }
 
+.rs-caption p {
+    margin: 0;
+    padding: 0;
+}
+
 .rs-caption.rs-top-left {
     top: 0;
     bottom: auto;
@@ -183,6 +194,6 @@
 
 /* Optional - remove captions at smaller screen widths
 @media screen and (max-width: 480px) {
-	.rs-caption { opacity: 0!important; }
+    .rs-caption { opacity: 0!important; }
 }
 */
